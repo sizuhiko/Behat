@@ -29,9 +29,9 @@ class DefinitionSnippet
      * @param StepNode $step     Step interested in snippet
      * @param string   $template Definition snippet template
      */
-    public function __construct(StepNode $step, $template)
+    public function __construct(StepNode $step, $template, $translator)
     {
-        $type           = $step->getType();
+        $type           = $translator->transType($step->getType(), $step->getLanguage());
         $this->type     = in_array($type, array('Given', 'When', 'Then')) ? $type : 'Given';
         $this->template = $template;
         $this->steps[]  = $step;

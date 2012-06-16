@@ -8,7 +8,8 @@ use Behat\Gherkin\Node\StepNode,
 
 use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Definition\DefinitionSnippet,
-    Behat\Behat\Util\Transliterator;
+    Behat\Behat\Util\Transliterator,
+    Behat\Behat\Gherkin\Keywords\KeywordTranslator;
 
 /*
  * This file is part of the Behat.
@@ -26,6 +27,17 @@ use Behat\Behat\Context\ContextInterface,
 class AnnotatedDefinitionProposal implements DefinitionProposalInterface
 {
     private static $proposedMethods = array();
+    private $translator = null;
+
+    /**
+     * Constructs definitions proposal.
+     *
+     * @param KeywordTranslator $translator
+     */
+    public function __construct(KeywordTranslator $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      * Checks if loader supports provided context.
@@ -132,7 +144,6 @@ class AnnotatedDefinitionProposal implements DefinitionProposalInterface
 PHP
           , '%s', $regex, $methodName, implode(', ', $args)
         );
-
-        return new DefinitionSnippet($step, $description);
+        return new DefinitionSnippet($step, $description, $this->translator);
     }
 }

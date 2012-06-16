@@ -8,7 +8,8 @@ use Behat\Gherkin\Node\StepNode,
 
 use Behat\Behat\Context\ContextInterface,
     Behat\Behat\Context\ClosuredContextInterface,
-    Behat\Behat\Definition\DefinitionSnippet;
+    Behat\Behat\Definition\DefinitionSnippet,
+    Behat\Behat\Gherkin\Keywords\KeywordTranslator;
 
 /*
  * This file is part of the Behat.
@@ -25,6 +26,18 @@ use Behat\Behat\Context\ContextInterface,
  */
 class ClosuredDefinitionProposal implements DefinitionProposalInterface
 {
+    private $translator = null;
+
+    /**
+     * Constructs definitions proposal.
+     *
+     * @param KeywordTranslator $translator
+     */
+    public function __construct(KeywordTranslator $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * Checks if loader supports provided context.
      *
@@ -87,6 +100,6 @@ PHP
           , '%s', $regex, implode(', ', $args)
         );
 
-        return new DefinitionSnippet($step, $description);
+        return new DefinitionSnippet($step, $description, $this->translator);
     }
 }
